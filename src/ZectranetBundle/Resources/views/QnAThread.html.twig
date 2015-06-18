@@ -1,0 +1,283 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ forum.name }}{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/QnAForum.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
+            <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+            </li>
+            <li>
+                <a href="{{ path('zectranet_show_QnA_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
+            </li>
+            <li class="active">
+                {{ thread.title }}
+            </li>
+        </ol>
+    </div>
+
+    <div class="page-header" style="margin-top: 10px;">
+        <div class="row">
+            {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                <div class="col-md-9" style="word-wrap: break-word; white-space: normal;">
+                    <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
+                        <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength" style="cursor: pointer;">
+                            <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ thread.title }}</span>
+                            <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
+                                <i style="color: #A9A6A6;" class="fa fa-edit"></i>
+                            </span>
+                        </div>
+                        <form ng-class="formStatus" action="{{ path('zectranet_QnA_thread_edit_name', {'project_id' : forum.id, 'thread_id' : thread.id}) }}" method="post">
+                            <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ thread.title }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
+                            <input type="submit" class="hidden">
+                        </form>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="col-md-9">
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ thread.title }}</span>
+                </div>
+
+            {% endif %}
+            <div class="col-md-3" style="font-size: 18px;"style="font-size: 18px;">
+                {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
+                    <div class="pull-right">
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
+                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_QnA_project">
+                                <i class="fa text-danger fa-fw fa-trash"></i>
+                            </a>
+                        </div>
+
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
+                            <a href="{{ path('zectranet_QnA_settings', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none;">
+                                <i class="fa text-primary fa-fw fa-gear"></i>
+                            </a>
+                        </div>
+
+                        {#<div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Profile">
+                            <a href="{{ path('zectranet_project_profile_page', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none; font-size: 1.3em;">
+                                Profile
+                            </a>
+                        </div>#}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 post-all">
+        <div class="row">
+            <div class="col-xs-12 post">
+
+                {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                    <div style="display: inline-block; width: 100%;">
+
+                        <div ng-click="setFormEditQuestion()" ng-if="!formStatusQuestion" id="spanLength" style="cursor: pointer;">
+                            <div id="question" class="post-message" style="display: block; width: 100%;">
+                                {{ thread.message }}
+                            </div>
+                        </div>
+
+                        <form ng-if="formStatusQuestion" action="{{ path('zectranet_QnA_thread_edit_message', {'project_id' : forum.id, 'thread_id' : thread.id}) }}" method="post">
+                            <textarea style="height: 100px;" name="newMessage" id="textareaName" class="form-control" required>{{ thread.message }}</textarea>
+                            <div class="pull-right" style="margin-top: 3px;">
+                                <button type="submit" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #30B22C;">
+                                    <i class="fa fa-check"></i>
+                                </button>
+
+                                <i ng-click="setFormNoneQuestion()" class="fa fa-close btn" style="height: 32px; width: 32px; background-color: #eee; padding: 7px; color: #EF2323;"></i>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+
+                    </div>
+
+                {% else %}
+                    <div id="question" class="post-message" style="display: block; width: 100%;">
+                        {{ thread.message }}
+                    </div>
+
+                {% endif %}
+
+                <hr style="margin: 0px;">
+                <div style="margin: 0px 0 5px 17px;">
+                    {% for i in 0..keywords | length - 1 %}
+                        <small>{{ keywords[i] }}</small>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-xs-12 post-span">
+
+                <ul class="list-inline" style="height: 30px;">
+                    <li>
+                        {#<a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none;">#}
+                        {#<img style="height: 25px;" class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">#}
+                        {#</a>#}
+                    </li>
+                    <li style="margin-top: 9px; color: #AAA;">
+                        by <a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none; ">
+                            {{ thread.user.username }}
+                        </a>
+                    </li>
+                    <li>
+                        <small class="text-muted"></small>
+                    </li>
+
+                    <li class="pull-right" style="padding: 10px 2px 10px 14px; border-left: 1px solid #dbdbdb; color: #AAA;">
+                        <small>asked {{ thread.date | date('d-m-y H:i') }}</small>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="page-header">
+        <span style="font-size: 22px; font-family: 'PT Sans Narrow', sans-serif;">
+            {{ thread.posts | length }}
+            {% if thread.posts | length == 1 %}
+                Answer
+            {% else %}
+                Answers
+            {% endif %}
+        </span>
+    </div>
+
+
+    {% for i, post in thread.posts %}
+
+        <div class="col-md-12 post-all" ng-init="formStatusAnswer[{{ i }}] = false">
+            <div class="row">
+                <div class="col-xs-12 post">
+
+                    {% if (post.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                        <div style="display: inline-block; width: 100%;">
+
+                            <div ng-click="setFormEditAnswer({{ i }})" ng-if="!formStatusAnswer[{{ i }}]" id="spanLength" style="cursor: pointer;">
+                                <div id="question" class="post-message" style="display: block; width: 100%;">
+                                    {{ post.message }}
+                                </div>
+                            </div>
+
+                            <form ng-if="formStatusAnswer[{{ i }}]" action="{{ path('zectranet_QnA_post_edit', {'post_id' : post.id}) }}" method="post">
+                                <textarea style="height: 100px;" name="newMessage" id="textareaName" class="form-control" required>{{ post.message }}</textarea>
+                                <div class="pull-right" style="margin-top: 3px;">
+                                    <button type="submit" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #30B22C;">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+
+                                    <i ng-click="setFormNoneAnswer({{ i }})" class="fa fa-close btn" style="height: 32px; width: 32px; background-color: #eee; padding: 7px; color: #EF2323;"></i>
+
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+
+                        </div>
+
+                    {% else %}
+                        <div id="question" class="post-message" style="display: block; width: 100%;">
+                            {{ post.message }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="col-xs-12 post-span">
+
+
+
+                    <ul class="list-inline" style="height: 29px;">
+                        <li>
+                            {#<a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none;">#}
+                            {#<img style="height: 25px;" class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">#}
+                            {#</a>#}
+                        </li>
+                        <li style="margin-top: 9px; color: #AAA;">
+                            by <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none; ">
+                                {{ post.user.username }}
+                            </a>
+                        </li>
+                        <li>
+                            <small class="text-muted"></small>
+                        </li>
+
+                        <li class="pull-right" style="padding: 10px 2px 10px 14px; border-left: 1px solid #dbdbdb; color: #AAA;">
+                            <small>answered {{ post.posted | date('d-m-y H:i') }}</small>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+    <div class="col-md-1">
+
+        <img style="height: 40px; margin-top: 7px;" class="img-responsive" src="{{ asset('') }}documents/{{ app.user.avatar }}">
+    </div>
+
+
+
+    <div class="col-md-10 coments-main" style="padding: 0px; margin: 10px 0px 90px -8px;">
+
+
+        <form action="{{ path('zectranet_QnA_add_post', { 'thread_id': thread.id }) }}" method="post">
+
+            <textarea name="message" ng-class="textareaSize" ng-change="comentEmpty()" ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control" placeholder="{{ app.user.name ~ ' ' ~ app.user.surname }} type here your answer"></textarea>
+
+            <button ng-click="clickButton()" type="submit" style="margin-top: 10px;" ng-class="comentButtonActive" ng-if="comentButton" class="btn btn-default btn-primary">
+                Answer
+            </button>
+
+            <button style="margin-top: 10px;" class="btn btn-default" ng-if="comentButton" ng-click="closeForm()">
+                Close
+            </button>
+
+        </form>
+    </div>
+
+
+
+
+    <div class="modal fade" id="delete_QnA_project" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                        Delete Project
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="header">
+                            <h3 class="text-center">Are you really want to delete this project?</h3><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-danger" href="{{ path('zectranet_delete_QnA_forum', {'project_id': forum.id }) }}">Delete</a>
+                        <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,221 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Office Archive{% endblock %}
+
+{% block body %}
+    <div ng-controller="OfficeArchiveController" ng-init="getArchive();">
+        <div class="page-header">
+            <h3>Office Archive</h3>
+        </div>
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p>
+                        <span>Archived QnA Forums</span>
+                        <button class="pull-right btn btn-default"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Reload archive"
+                                ng-click="getArchive();">
+                            <i class="fa fa-repeat"></i>
+                        </button>
+                        <span class="clearfix"></span>
+                    </p>
+                </div>
+                <div class="panel-body" cg-busy="officeArchivePromise">
+                    <!-- BEGIN OF QnA FORUM ARCHIVE -->
+                    <div class="row" ng-if="(!archives.QnAForums) || (archives.QnAForums.length == 0)">
+                        <div class="col-md-12">
+                            <h4 class="text-info" align="center">
+                                There is empty
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(archives.QnAForums) && (archives.QnAForums.length > 0)">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-1">#</th>
+                                    <th class="col-xs-9">Name</th>
+                                    <th class="col-xs-1"><div class="text-center">Restore</div></th>
+                                    <th class="col-xs-1"><div class="text-center">Delete</div></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="QnA in archives.QnAForums">
+                                    <td class="col-xs-1">[[ $index + 1 ]]</td>
+                                    <td class="col-xs-9">[[ QnA.name ]]</td>
+                                    <td class="col-xs-1">
+                                        <form action="[[ QnA.href ]]" method="post">
+                                            <input type="hidden" name="project_type" value="1" />
+                                            <button class="btn btn-default center-block" type="submit">
+                                                <i class="fa fa-upload"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="col-xs-1">
+                                        <button type="button" class="btn btn-default center-block"
+                                                ng-click="deleteFromArchive(QnA.id, 1, $index);">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- END OF QnA FORUM ARCHIVE -->
+                </div>
+
+                <div class="panel-heading">
+                    Archived Header Forums
+                </div>
+                <div class="panel-body" cg-busy="officeArchivePromise">
+                    <!-- BEGIN OF HEADER FORUM ARCHIVE -->
+                    <div class="row" ng-if="(!archives.hfForums) || (archives.hfForums.length == 0)">
+                        <div class="col-md-12">
+                            <h4 class="text-info" align="center">
+                                There is empty
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(archives.hfForums) && (archives.hfForums.length > 0)">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-1">#</th>
+                                    <th class="col-xs-9">Name</th>
+                                    <th class="col-xs-1"><div class="text-center">Restore</div></th>
+                                    <th class="col-xs-1"><div class="text-center">Delete</div></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="hf in archives.hfForums">
+                                    <td class="col-xs-1">[[ $index + 1 ]]</td>
+                                    <td class="col-xs-9">[[ hf.name ]]</td>
+                                    <td class="col-xs-1">
+                                        <form action="[[ hf.href ]]" method="post">
+                                            <input type="hidden" name="project_type" value="2" />
+                                            <button class="btn btn-default center-block" type="submit">
+                                                <i class="fa fa-upload"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="col-xs-1">
+                                        <button type="button" class="btn btn-default center-block"
+                                                ng-click="deleteFromArchive(hf.id, 2, $index);">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- END OF HEADER FORUM ARCHIVE -->
+                </div>
+
+                <div class="panel-heading">
+                    Archived Development Projects
+                </div>
+                <div class="panel-body" cg-busy="officeArchivePromise">
+                    <!-- BEGIN OF DEVELOPMENT TEMPLATE ARCHIVE -->
+                    <div class="row" ng-if="(!archives.projects) || (archives.projects.length == 0)">
+                        <div class="col-md-12">
+                            <h4 class="text-info" align="center">
+                                There is empty
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(archives.projects) && (archives.projects.length > 0)">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-1">#</th>
+                                    <th class="col-xs-9">Name</th>
+                                    <th class="col-xs-1"><div class="text-center">Restore</div></th>
+                                    <th class="col-xs-1"><div class="text-center">Delete</div></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="project in archives.projects">
+                                    <td class="col-xs-1">[[ $index + 1 ]]</td>
+                                    <td class="col-xs-9">[[ project.name ]]</td>
+                                    <td class="col-xs-1">
+                                        <form action="[[ project.href ]]" method="post">
+                                            <input type="hidden" name="project_type" value="4" />
+                                            <button class="btn btn-default center-block" type="submit">
+                                                <i class="fa fa-upload"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="col-xs-1">
+                                        <button type="button" class="btn btn-default center-block"
+                                                ng-click="deleteFromArchive(project.id, 4, $index);">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- END OF DEVELOPMENT TEMPLATE ARCHIVE -->
+                </div>
+
+                <div class="panel-heading">
+                    <div ng-click="(showLogs == false) ? showLogs = true : showLogs = false" style="display: inline-block; cursor: pointer; color: #31708f;">
+                        <i class="fa fa-plus" ng-if="!showLogs"></i>
+                        <i class="fa fa-minus" ng-if="showLogs"></i>
+                    </div>
+                    Logs
+                </div>
+                <div class="panel-body" cg-busy="officeArchivePromise" ng-if="showLogs">
+                    <div class="row" ng-if="(!logs) || (logs.length == 0)">
+                        <div class="col-md-12">
+                            <h4 class="text-info" align="center">
+                                There is empty
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(logs) && (logs.length > 0)">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-1">#</th>
+                                    <th class="col-xs-9">Event</th>
+                                    <th class="col-xs-2"><div class="text-center">Date</div></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="log in logs">
+                                    <td class="col-xs-1">[[ $index + 1 ]]</td>
+                                    <td class="col-xs-9">[[ log.event ]]</td>
+                                    <td class="col-xs-2">
+                                        [[ log.date ]]
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        JSON_URLS.getOfficeArchive = "{{ path('zectranet_get_office_archive', { 'office_id': office.id }) }}";
+        JSON_URLS.restoreFromArchive = "{{ path('zectranet_restore_project_from_archive', { 'office_id': office.id, 'project_id': 'project_id' }) }}";
+        JSON_URLS.deleteFromArchive = "{{ path('zectranet_delete_project_from_archive', { 'office_id': office.id, 'project_id': 'project_id' }) }}";
+    </script>
+    <script src="{{ asset('bundles/zectranet/js/custom/officeArchiveController.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Error Logs{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/zectranet/css/syntax.css') }}" type="text/css"/>
+{% endblock %}
+
+{% block body %}
+    <div ng-controller="ErrorLogsController" ng-init="getErrors();">
+        <div class="row">
+            <div class="col-md-12">
+                <draw-chart width="500" height="500"></draw-chart>
+            </div>
+        </div>
+
+        <div class="row" ng-repeat="error in errors" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 6px 0 darkseagreen; width: 100%;">
+                    <p class="pull-left text-primary">
+                        <b>#[[ error.id ]]</b>
+                    </p>
+                    <p class="pull-right text-muted"><i>[[ error.date ]]</i></p>
+                    <div class="clearfix"></div>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">Error Message:</h4>
+                    <div class="message-block" ng-bind-html="error.message"></div>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">Where:</h4>
+                    <div class="message-block" ng-bind-html="error.where"></div>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">From:</h4>
+                    <div class="message-block" ng-bind-html="error.from"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/zectranet/js/custom/errorLogsController.js') }}"></script>
+    <script>
+        JSON_URLS.getErrors = "{{ path('zectranet_get_error_logs_errors') }}";
+    </script>
+{% endblock %}

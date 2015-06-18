@@ -1,0 +1,191 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ user.username }} Profile{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <h3 style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;"> {{ user.name }} {{ user.surname }}</h3>
+            </div>
+
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <img class="img-responsive" src="{{ asset('') }}documents/{{ user.avatar }}">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-xs-12">
+                        <div class="btn-group btn-group-vertical" style="width: 100%;">
+                            {% if app.user.id == user.id %}
+                                <a href="{{ path('zectranet_generate_avatar') }}" class="btn btn-default btn-warning">
+                                    Generate avatar
+                                </a>
+                                <a href="{{ path('zectranet_edit_user_page') }}" class="btn btn-primary btn-default">
+                                    Edit profile
+                                </a>
+                            {% elseif user not in app.user.contacts %}
+                                <a class="btn btn-default btn-success" data-toggle="modal" data-target="#add_to_contact_list">
+                                    Add to contact list
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="add_to_contact_list" tabindex="-1" ng-controller="UserController">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="color: #000000;" align="center">
+                                Add To Contact List
+                            </h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-offset-1 col-xs-10">
+                                    <div class="form-group">
+                                        <label>
+                                            <b>Request Message</b>
+                                        </label>
+                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="atclRequest.message" ng-init="atclRequest.message = '{{ app.user.username }}' + ' want add you to contact list'"></textarea>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btn-default" ng-click="SendRequest();">Send Request</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <p><strong>Username: </strong> {{ user.username }}</p>
+                <hr>
+                {% if userInfo.residenceCountryVisible %}
+                <p><strong>Country: </strong> {{ (userInfo.residenceCountry) ? userInfo.residenceCountry : '-' }}</p>
+                <hr>
+                {% endif %}
+                <p><strong>Email: </strong> {{ user.email }}</p>
+                <hr>
+                {% if userInfo.workExpirienceVisible %}
+                <p><strong>Work Experience: </strong> {{ (userInfo.workExpirience) ? userInfo.workExpirience : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.skillsVisible %}
+                <p><strong>Skills: </strong> {{ (userInfo.skills) ? userInfo.skills : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.interestsVisible %}
+                <p><strong>Intersts: </strong> {{ (userInfo.interests) ? userInfo.interests : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.volunteerWorkVisible %}
+                <p><strong>Volunteer Work: </strong> {{ (userInfo.volunteerWork) ? userInfo.volunteerWork : '-' }}</p>
+                <hr>
+                {% endif %}
+                Socials:
+                {% if userInfo.facebookVisible %}
+                    {% if userInfo.facebook %}
+                        <a href="{{ userInfo.facebook }}" style="margin-left: 5px;">Facebook</a>
+                    {% endif %}
+                {% endif %}
+                {% if userInfo.twitterVisible %}
+                    {% if userInfo.twitter %}
+                        <a href="{{ userInfo.twitter }}" style="margin-left: 5px;">Twitter</a>
+                    {% endif %}
+                {% endif %}
+                {% if userInfo.linkedInVisible %}
+                    {% if userInfo.linkedIn %}
+                        <a href="{{ userInfo.linkedIn }}" style="margin-left: 5px;">LinkedIn</a>
+                    {% endif %}
+                {% endif %}
+                {% if userInfo.googlePlusVisible %}
+                    {% if userInfo.googlePlus %}
+                        <a href="{{ userInfo.googlePlus }}" style="margin-left: 5px;">Google+</a>
+                    {% endif %}
+                {% endif %}
+                <hr>
+
+        </div>
+    </div>
+
+        {% if user.id == app.user.id %}
+        <div class="row" style="margin-bottom: 20px;">
+            <div class="col-xs-12">
+                <hr>
+                <p align="center"><strong>Daily TimeSheet:</strong></p>
+                {% if user.wde | length == 0 %}
+                    <h4 class="text-center text-info">WDE will be displayed here</h4>
+                {% else %}
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Start In Office</th>
+                            <th>Start Lunch</th>
+                            <th>End Lunch</th>
+                            <th>End In Office</th>
+                            <th>Total hours</th>
+                            <th>Main Task</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in 0..user.wde | length - 1 %}
+                            <tr>
+                                <td>
+                                    {{ i + 1 }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].date | date("Y-m-d")  }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].startTime is empty ? "-": user.wde[i].startTime | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].beginLunch is empty ? "-": user.wde[i].beginLunch | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].endLunch is empty ? "-": user.wde[i].endLunch | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].endTime is empty ? "-": user.wde[i].endTime | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].hours is empty ? "-": user.wde[i].hours }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].mainTask is empty ? "-": user.wde[i].mainTask }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+        <script>
+            var USER_ID = {{ user.id }};
+            var APP_USER_ID = {{ app.user.id }};
+        </script>
+        <script src="{{ asset('bundles/zectranet/js/custom/userController.js') }}" type="text/javascript"></script>
+{% endblock %}

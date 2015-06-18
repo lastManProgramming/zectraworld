@@ -1,0 +1,8 @@
+composer create-project symfony/framework-standard-edition path/ - download symfony
+php app/console generate:bundle --namespace=Test/StudyBundle --format=yml - generate new namespace
+php app/console assets:install www - symlink
+php app/console doctrine:generate:entities FileName - generate database from entities
+php app/console doctrine:database:create - generate database
+php app/console doctrine:schema:update --force - update database schema
+php app/console cache:clear
+php app/console debug:router

@@ -1,0 +1,451 @@
+{% extends '@Zectranet/layout.html.twig' %}
+
+{% block title %}Index page{% endblock %}
+
+{% block styles %}
+	{{ parent() }}
+
+{% endblock %}
+
+{% block leftSidebar %}
+	<div class="navbar-default sidebar" style="margin-top: 0;">
+		<div class="sidebar-nav navbar-collapse">
+
+
+				<!-- BEGIN OF SITE TREE -->
+				<ul class="nav" id="side-menu">
+
+					 <li class="visible-xs" style="margin-top: 59px;">
+						<a href="#">
+							Zectranet
+						</a>
+					</li>
+					<li style="padding: 2px;">
+						<a href="{{ path('zectranet_public_market') }}">
+							<i class='fa fa-credit-card'></i>
+							Public Market
+						</a>
+					</li>
+
+					<li {% if office is defined %}
+                            class="active"
+                        {% elseif project is defined and project in app.user.projects %}
+                            class="active"
+                        {% elseif forum is defined and forum in app.user.connectedHFForums %}
+                            class="active"
+                        {% elseif forum is defined and forum in app.user.connectedQnAForums %}
+                            class="active"
+                        {% endif %}>
+                        {% set homeOffice = app.user.homeOffice %}
+
+                        {% set HOProjectsCount = 0 %}
+                        {% for project in app.user.projects if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
+                        {% for project in app.user.connectedHFForums if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
+                        {% for project in app.user.connectedQnAForums if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
+						<a href="{{ path('zectranet_show_office', {'office_id': app.user.homeOffice.id }) }}"
+                           class="
+                                {% if HOProjectsCount > 0 %}
+                                    {{ 'non-collapsible-href' }}
+                                {% else %}
+                                    {{ 'non-collapsible-href-full' }}
+                                {% endif %}">
+							<i class='fa fa-home'></i>
+							<span>Home Office</span>
+						</a>
+                        {% if HOProjectsCount > 0 %}
+                            <a href="{{ path('zectranet_show_office', {'office_id': homeOffice.id }) }}" class="collapsible-href">
+                                {% if office is defined %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif project is defined and project in app.user.projects %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif forum is defined and forum in app.user.connectedHFForums %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif forum is defined and forum in app.user.connectedQnAForums %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% else %}
+                                    <i class="fa fa-arrow-down fa-fw"></i>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                        <div class="clearfix"></div>
+						<ul class="nav nav-second-level">
+                            {% for project in app.user.projects if project.users | length == 1 and not project.archived %}
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <i class="fa fa-briefcase fa-fw"></i>
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                            {% for project in app.user.connectedHFForums if project.users | length == 1 and not project.archived %}
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <i class="fa fa-briefcase fa-fw"></i>
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                            {% for project in app.user.connectedQnAForums if project.users | length == 1 and not project.archived %}
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <i class="fa fa-briefcase fa-fw"></i>
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                            <li>
+                                {% set connectedProjectsCount = 0 %}
+                                {% for project in app.user.projects if project.users | length > 1 and not project.archived %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+                                {% for project in app.user.connectedHFForums if project.users | length > 1 and not project.archived %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+                                {% for project in app.user.connectedQnAForums if project.users | length > 1 and not project.archived %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+
+                                <a href="#">
+                                    <i class='fa fa-briefcase'></i>
+                                    <span>Connected Projects</span>
+                                    {% if connectedProjectsCount > 0 %}
+                                        <span class="text-right pull-right">
+                                            {% if project is defined and project in app.user.projects and project.users | length > 1 and not project.archived %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% else %}
+                                                <i class="fa fa-arrow-down fa-fw"></i>
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </a>
+                                <ul class="nav nav-third-level">
+                                    {% for project in app.user.projects if project.users | length > 1 and not project.archived %}
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <i class="fa fa-briefcase fa-fw"></i>
+                                                <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+
+                                    {% for project in app.user.connectedHFForums if project.users | length > 1 and not project.archived %}
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <i class="fa fa-briefcase fa-fw"></i>
+                                               <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+
+                                    {% for project in app.user.connectedQnAForums if project.users | length > 1 and not project.archived %}
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                <i class="fa fa-briefcase fa-fw"></i>
+                                               <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
+					</li>
+
+                    {% for office in app.user.ownedOffices if office.id != app.user.homeOffice.id %}
+                        <li data-toggle="tooltip" data-placement="right" title="{{ office.name }}">
+                            <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
+                               class="
+                                    {% if office.projects | length > 0 %}
+                                        {{ 'non-collapsible-href' }}
+                                    {% else %}
+                                        {{ 'non-collapsible-href-full' }}
+                                    {% endif %}">
+                                <i class='fa fa-home'></i>
+                                <span>{{ office.name }}</span>
+                            </a>
+                            {% if office.projects | length > 0 %}
+                                <a href="#" class="collapsible-href">
+                                    <i class="fa fa-arrow-down fa-fw"></i>
+                                </a>
+                            {% endif %}
+                            <div class="clearfix"></div>
+                            <ul class="nav nav-second-level">
+                                {% for project in office.projects %}
+                                <li>
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+
+                    {% for office in app.user.assignedOffices if office.id != app.user.homeOffice.id %}
+                        <li data-toggle="tooltip" data-placement="right" title="{{ office.name }}">
+                            <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
+                               class="
+                                    {% if office.projects | length > 0 %}
+                                        {{ 'non-collapsible-href' }}
+                                    {% else %}
+                                        {{ 'non-collapsible-href-full' }}
+                                    {% endif %}">
+                                <i class='fa fa-home'></i>
+                                <span>{{ office.name }}</span>
+                            </a>
+                            {% if office.projects | length > 0 %}
+                                <a href="#" class="collapsible-href">
+                                    <i class="fa fa-arrow-down fa-fw"></i>
+                                </a>
+                            {% endif %}
+                            <div class="clearfix"></div>
+                            <ul class="nav nav-second-level">
+                                {% for project in office.projects %}
+                                    <li>
+                                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                           <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+
+                    {% if is_granted('ROLE_WEB_DEVELOPER') %}
+                    <li>
+                        <a href="{{ path('zectranet_get_error_logs') }}">
+                            <i class='fa fa-close'></i>
+                            Error Logs
+                        </a>
+                    </li>
+                    {% endif %}
+
+				</ul>
+
+
+
+
+
+
+
+            <div id="quicksearch-block" class="visible-xs visible-sm" ng-controller="SearchController">
+                <ul class="nav">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form dropdown" >
+                            <input id="text-search" ng-model="searchInput"
+                                   class="form-control dropdown-toggle"
+                                   placeholder="Search..."
+                                   maxlength="50"
+                                   ng-change="InputChange(searchInput, false);"
+                                   data-toggle="dropdown"
+                                   type="search" />
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-class="{ 'disabled': searchInput.length == 0 }"
+                                        ng-click="searchAction(searchInput)">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+
+                            <div class="dropdown-menu">
+                                <div class="list-group" style="margin-bottom: 0;">
+                                    <div ng-if="miniSearchResults.total == 0" class="list-group-item">
+                                        <h5 class="text-info" align="center">Search for <i>[[ searchInput ]]</i>...</h5>
+                                    </div>
+                                    <div ng-if="miniSearchResults.total == -1" class="list-group-item">
+                                        <h5 class="text-info" align="center">Didn't found any match</h5>
+                                    </div>
+                                    <div ng-if="miniSearchResults.total > 0">
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.homeOffice">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.message ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right">
+                                                    <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.forums">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">Header forums</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.threads">
+                                            <a ng-href="[[ item.href ]]" target="_self" style="text-decoration: none;">
+                                                <h4 class="text-info">[[ item.title ]]</h4>
+                                                <p style="color: black; font-style: italic; font-size: 11px;">[[ item.message ]]</p>
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right">
+                                                    <i class="text-muted" style="font-size: 10px;">threads</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.posts">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.message ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">header forums posts</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.forums">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">QnA Forums</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.threads">
+                                            <a ng-href="[[ item.href ]]" target="_self" style="text-decoration: none;">
+                                                <h4 class="text-info">[[ item.title ]]</h4>
+                                                <p style="color: black; font-style: italic; font-size: 11px;">[[ item.message ]]</p>
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">QnA forums threads</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.posts">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.message ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">QnA forums posts</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.tasks">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">tasks</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.taskPosts">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.message ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">task posts</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.posts">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.message ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">development posts</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.projects">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">projects</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                </div>
+
+
+
+
+				<!-- END OF SITE TREE -->
+
+			</div>
+		</div>
+	</div>
+
+	{% block modals %}
+
+	{% endblock %}
+{% endblock %}
+
+
+{% block body %}
+
+	{% block breadcrumbs %}
+
+	{% endblock %}
+
+	{% block pageheader %}
+
+	{% endblock %}
+
+	{% block content %}
+
+	{% endblock %}
+
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script src="{{ asset('bundles/zectranet/js/custom/searchController.js') }}" type="text/javascript" ></script>
+	<script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
+	<script>
+		// Variable for AngularJS
+		TEMPPARAMS.USER_ID = {{ app.user.id }};
+		JSON_URLS.deleteScrenshots  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
+		JSON_URLS.urlGetContactList  = "{{ path('zectranet_get_contact_list')}}";
+		JSON_URLS.urlSendRequest  = "{{ path('zectranet_send_user_membership_request')}}";
+        JSON_URLS.searchPage = "{{ path('zectranet_search_page', { 'slug': 'slug' }) }}";
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
+	</script>
+{% endblock %}
+

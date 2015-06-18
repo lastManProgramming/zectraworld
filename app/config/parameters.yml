@@ -1,0 +1,14 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: zectraworld.com.mysql
+    database_port: 3306
+    database_name: zectraworld_com
+    database_user: zectraworld_com
+    database_password: VUrUGMfc
+    mailer_transport: smtp
+    mailer_host: ~
+    mailer_user: ~
+    mailer_password: ~
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt

@@ -1,0 +1,757 @@
+zectranet_homepage:
+    path: /
+    defaults: { _controller: ZectranetBundle:Index:index }
+
+zectranet_login:
+    path: /login
+    defaults: { _controller: ZectranetBundle:Index:login }
+
+zectranet_login_check:
+    path: /login_check
+    defaults: { _controller: ZectranetBundle:Index:loginCheck }
+
+zectranet_logout:
+    path: /logout
+
+zectranet_user_home:
+    path: /user/home
+    defaults: { _controller: ZectranetBundle:User:home }
+
+zectranet_get_error_logs:
+    path: /dev/error_logs
+    defaults: { _controller: ZectranetBundle:ErrorLog:index }
+
+zectranet_get_error_logs_errors:
+    path: /dev/error_logs/getErrors
+    defaults: { _controller: ZectranetBundle:ErrorLog:getErrors }
+
+zectranet_signup:
+    path: /signup/{errorValid}
+    defaults: { _controller: ZectranetBundle:Index:signup, errorValid: null }
+
+zectranet_signup_action:
+    path: /signup_action
+    defaults: { _controller: ZectranetBundle:Index:signupAct }
+
+zectranet_forgot_password:
+    path: /forgot_password
+    defaults: { _controller: ZectranetBundle:Index:forgotPassword }
+
+zectranet_reset_password:
+    pattern: /reset_password/{keyForAccess}
+    defaults: { _controller: ZectranetBundle:Index:resetPassword }
+
+zectranet_reset_password_save:
+    pattern: /reset_password_save/{userid}
+    defaults: { _controller: ZectranetBundle:Index:resetPasswordSave }
+
+zectranet_wde:
+    path: /wde
+    defaults: { _controller: ZectranetBundle:User:wde }
+
+#################################################################################
+####################### Begin Of Public Market Functions ########################
+#################################################################################
+
+zectranet_public_market:
+    path: /public_market
+    defaults: { _controller: ZectranetBundle:PublicMarket:index }
+
+zectranet_public_market_all_contacts:
+    path: /public_market/all_contacts
+    defaults: { _controller: ZectranetBundle:PublicMarket:getAllContacts }
+
+#################################################################################
+####################### End Of Public Market Functions ##########################
+#################################################################################
+
+zectranet_edit_user_page:
+    path: /userProfile/edit
+    defaults: { _controller: ZectranetBundle:User:editProfilePage }
+
+zectranet_edit_user_page_action:
+    path: /userProfile/edit/{user_id}
+    defaults: { _controller: ZectranetBundle:User:editProfile }
+    requirements:
+          user_id: \d+
+
+zectranet_user_page:
+    pattern: /userProfile/{user_id}
+    defaults: { _controller: ZectranetBundle:User:index, user_id: null }
+    requirements:
+            user_id: \d+
+
+zectranet_user_settings:
+    path: /user/settings
+    defaults: { _controller: ZectranetBundle:User:settings }
+
+zectranet_user_settings_general:
+    path: /user/settings/general
+    defaults: { _controller: ZectranetBundle:User:general }
+
+zectranet_user_settings_email:
+    path: /user/settings/email
+    defaults: { _controller: ZectranetBundle:User:email }
+
+zectranet_user_settings_site:
+    path: /user/settings/site
+    defaults: { _controller: ZectranetBundle:User:site }
+
+zectranet_user_settings_changePassword:
+    path: /user/settings/change_password
+    defaults: { _controller: ZectranetBundle:User:changePassword }
+
+zectranet_generate_avatar:
+    path: /user/generate_avatar
+    defaults: { _controller: ZectranetBundle:User:generateAvatar }
+
+zectranet_notifications_clear:
+    pattern:  /notifications/clear
+    defaults: { _controller: ZectranetBundle:Notification:clearNotifications }
+
+zectranet_notifications_show:
+    pattern:  /notifications
+    defaults: { _controller: ZectranetBundle:Notification:showNotifications }
+
+zectranet_notifications_get:
+    pattern:  /notifications/get
+    defaults: { _controller: ZectranetBundle:Notification:getNotifications }
+
+zectranet_all_notifications:
+    path: user/notifications/all
+    defaults: { _controller: ZectranetBundle:Notification:all }
+
+zectranet_delete_all_notifications:
+    path: user/notifications/delete_all
+    defaults: { _controller: ZectranetBundle:Notification:deleteAll }
+
+############################################################################
+######################### BEGIN OF OFFICE ROUTINGS #########################
+############################################################################
+
+zectranet_show_office_archive:
+    pattern: /office/{office_id}/showArchive
+    defaults: { _controller: ZectranetBundle:OfficeArchive:index }
+    requirements:
+        office_id: \d+
+
+zectranet_get_office_archive:
+    pattern: /office/{office_id}/getArchive
+    defaults: { _controller: ZectranetBundle:OfficeArchive:getArchive }
+    requirements:
+        office_id: \d+
+
+zectranet_add_project_to_archive:
+    pattern: /office/{office_id}/addToArchive/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:addToArchive }
+    requirements:
+        office_id: \d+
+        project_id: \d+
+
+zectranet_restore_project_from_archive:
+    pattern: /office/{office_id}/archive/restore/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:restoreFromArchive }
+
+zectranet_delete_project_from_archive:
+    pattern: /office/{office_id}/archive/delete/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:deleteFromArchive }
+
+zectranet_show_office:
+    pattern: /office/{office_id}/{conversation_id}
+    defaults: { _controller: ZectranetBundle:Office:index, conversation_id: 0 }
+    requirements:
+        office_id: \d+
+
+zectranet_add_office:
+    path: /office/add
+    defaults: { _controller: ZectranetBundle:Office:addOffice }
+
+zectranet_delete_office:
+    pattern: /office/{office_id}/delete
+    defaults: { _controller: ZectranetBundle:Office:delete }
+    requirements:
+        office_id: \d+
+
+zectranet_settings_office:
+    pattern: /office/{office_id}/settings
+    defaults: { _controller: ZectranetBundle:Office:settings }
+    requirements:
+        office_id: \d+
+
+zectranet_office_get_WDE:
+    pattern: /office/{office_id}/getWDE
+    defaults: { _controller: ZectranetBundle:Office:getWDE }
+    requirements:
+        office_id: \d+
+
+zectranet_office_show_WDE:
+    pattern: /office/{office_id}/showWDE
+    defaults: { _controller: ZectranetBundle:Office:showWDE }
+    requirements:
+        office_id: \d+
+
+zectranet_get_office_members:
+    pattern: /office/{office_id}/getMembers
+    defaults: { _controller: ZectranetBundle:Office:getMembers }
+    requirements:
+        office_id: \d+
+
+zectranet_save_office_members:
+    pattern: /office/{office_id}/saveMembersState
+    defaults: { _controller: ZectranetBundle:Office:saveMembers }
+    requirements:
+        office_id: \d+
+
+zectranet_office_change_visible_state:
+    pattern: /office/{office_id}/settings/visibleStateChange
+    defaults: { _controller: ZectranetBundle:Office:visibleStateChange }
+    requirements:
+        office_id: \d+
+
+zectranet_office_add_post:
+    pattern: /office/{office_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:OfficePost:addPost }
+    requirements:
+        office_id: \d+
+
+zectranet_office_get_post:
+    pattern: /office/{office_id}/getPosts
+    defaults: { _controller: ZectranetBundle:OfficePost:getPosts }
+    requirements:
+        office_id: \d+
+
+############################################################################
+######################### END OF OFFICE ROUTINGS ###########################
+############################################################################
+
+zectranet_show_project:
+    pattern: /project/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:index }
+    requirements:
+        project_id: \d+
+
+zectranet_project_profile_page:
+    pattern: /project/profile/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:showProfile }
+    requirements:
+        project_id: \d+
+
+zectranet_settings_project:
+    pattern: /project/{project_id}/settings
+    defaults: { _controller: ZectranetBundle:Project:settings }
+    requirements:
+        project_id: \d+
+
+zectranet_project_change_visible_state:
+    pattern: /project/{project_id}/settings/visibleStateChange
+    defaults: { _controller: ZectranetBundle:Project:visibleStateChange }
+    requirements:
+        project_id: \d+
+
+zectranet_get_project_members:
+    pattern: /project/{project_id}/getMembers
+    defaults: { _controller: ZectranetBundle:Project:getMembers }
+    requirements:
+        project_id: \d+
+
+zectranet_get_project_versions:
+    pattern: /project/{project_id}/getVersions
+    defaults: { _controller: ZectranetBundle:Project:getProjectVersions }
+    requirements:
+        project_id: \d+
+
+zectranet_add_project_version:
+    pattern: /project/{project_id}/addNewVersion
+    defaults: { _controller: ZectranetBundle:Project:addNewProjectVersion }
+    requirements:
+        project_id: \d+
+
+##############################################################################
+####################### BEGIN OF HEADER FORUM ROUTINGS #######################
+##############################################################################
+
+zectranet_show_header_forum:
+    pattern: /headerForum/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:index }
+    requirements:
+         project_id: \d+
+
+zectranet_header_forum_edit_name:
+    pattern: /headerForumEdit/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:editName }
+    requirements:
+        project_id: \d+
+
+zectranet_show_header_forum_subheader:
+    pattern: /headerForum/{project_id}/subheader/{subheader_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:forum }
+
+
+zectranet_subheader_edit_name:
+    pattern: /headerForum/{project_id}/{subheader_id}/edit
+    defaults: { _controller: ZectranetBundle:HeaderForum:editNameSubheader}
+    requirements:
+        project_id: \d+
+        subheader_id: \d+
+
+zectranet_show_header_forum_settings:
+    pattern: /headerForum/{project_id}/settings
+    defaults: { _controller: ZectranetBundle:HeaderForum:settings }
+    requirements:
+        project_id: \d+
+
+zectranet_add_header_action:
+    pattern: /headerForum/{project_id}/addHeader
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewHeader }
+    requirements:
+        project_id: \d+
+
+zectranet_add_subheader_action:
+    pattern: /headerForum/addSubHeader/{header_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewSubHeader }
+    requirements:
+        header_id: \d+
+
+zectranet_delete_header_action:
+    pattern: /headerForum/deleteHeader/{header_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:deleteHeader }
+    requirements:
+        header_id: \d+
+
+zectranet_get_header_forum_headers:
+    pattern: /headerForum/{project_id}/getHeaders
+    defaults: { _controller: ZectranetBundle:HeaderForum:getHeaders }
+    requirements:
+        project_id: \d+
+
+zectranet_show_header_forum_thread:
+    pattern: /headerForum/{project_id}/{subheader_id}/{thread_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:showThread }
+    requirements:
+        project_id: \d+
+        subheader_id: \d+
+        thread_id: \d+
+
+zectranet_start_header_forum_thread:
+    pattern: /headerForum/{subheader_id}/start_new_thread
+    defaults: { _controller: ZectranetBundle:HeaderForum:startNewThread }
+    requirements:
+        subheader_id: \d+
+
+zectranet_add_post_header_forum_thread:
+    pattern: /headerForum/thread/{thread_id}/addPost
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewPost }
+    requirements:
+        thread_id: \d+
+
+##############################################################################
+####################### END OF HEADER FORUM ROUTINGS #########################
+##############################################################################
+
+zectranet_show_QnA_forum:
+    pattern: /QnAForum/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:showForum }
+    requirements:
+        project_id: \d+
+
+zectranet_QnA_forum_edit_name:
+    pattern: /QnAForum/{project_id}/edit
+    defaults: { _controller: ZectranetBundle:QnAForum:editName }
+    requirements:
+        project_id: \d+
+
+zectranet_QnA_settings:
+    pattern: /QnAForum/{project_id}/settings
+    defaults: { _controller: ZectranetBundle:QnAForum:settings }
+    requirements:
+        project_id: \d+
+
+zectranet_delete_QnA_forum:
+    pattern: /QnAForum/delete/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:deleteForum }
+    requirements:
+        project_id: \d+
+
+zectranet_QnA_create_new_question:
+    pattern: /QnAForum/create_question/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:createQuestion }
+    requirements:
+        project_id: \d+
+
+zectranet_show_QnA_thread:
+    pattern: /QnAForum/{project_id}/thread/{thread_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:showThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
+zectranet_QnA_thread_edit_name:
+    pattern: /QnAForum/{project_id}/thread/{thread_id}/edit
+    defaults: { _controller: ZectranetBundle:QnAForum:editNameThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
+zectranet_QnA_thread_edit_message:
+    pattern: /QnAForum/{project_id}/thread/{thread_id}/editMessage
+    defaults: { _controller: ZectranetBundle:QnAForum:editMessageThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
+zectranet_QnA_add_post:
+    pattern: /QnAForum/thread/add_post/{thread_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:addPost }
+    requirements:
+        thread_id: \d+
+
+zectranet_QnA_post_edit:
+    pattern: /QnAForum/editPost/{post_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:editPost }
+    requirements:
+        post_id: \d+
+
+zectranet_accept_request_user_office:
+    pattern: /office/{office_id}/acceptRequestUserOffice
+    defaults: { _controller: ZectranetBundle:Office:acceptRequestUserOffice }
+    requirements:
+        office_id: \d+
+
+zectranet_decline_request_user_office:
+    pattern: /office/{office_id}/declineRequestUserOffice
+    defaults: { _controller: ZectranetBundle:Office:declineRequestUserOffice }
+    requirements:
+        office_id: \d+
+
+zectranet_add_project:
+    path: /office/{office_id}/project/add
+    defaults: { _controller: ZectranetBundle:Project:addProject }
+
+zectranet_project_post_edit:
+    pattern: /project/edit/post/{post_id}
+    defaults: { _controller: ZectranetBundle:ProjectPost:editPost }
+    requirements:
+        post_id: \d+
+
+zectranet_task_post_edit:
+    pattern: /task/edit/post/{post_id}
+    defaults: { _controller: ZectranetBundle:Task:editPost }
+    requirements:
+        post_id: \d+
+
+zectranet_delete_project:
+    pattern: /project/{project_id}/delete
+    defaults: { _controller: ZectranetBundle:Project:delete }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_post:
+    pattern: /project/{project_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:ProjectPost:addPost }
+    requirements:
+        project_id: \d+
+
+zectranet_project_get_post:
+    pattern: /project/{project_id}/getPosts
+    defaults: { _controller: ZectranetBundle:ProjectPost:getPosts }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_task:
+    pattern: /project/{project_id}/addNewTask
+    defaults: { _controller: ZectranetBundle:Project:addTask }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_subtask:
+    pattern: /project/{project_id}/addNewSubTask
+    defaults: { _controller: ZectranetBundle:Project:addSubTask }
+    requirements:
+        project_id: \d+
+
+zectranet_project_get_tasks:
+    pattern: /project/{project_id}/getTasks
+    defaults: { _controller: ZectranetBundle:Task:getTasks }
+    requirements:
+        project_id: \d+
+
+zectranet_change_task_status:
+    pattern: /task/{task_id}/changeStatus
+    defaults: { _controller: ZectranetBundle:Task:changeTaskStatus }
+    requirements:
+        task_id: \d+
+
+zectranet_project_get_epic_stories:
+    pattern: /project/{project_id}/getEpicStories
+    defaults: { _controller: ZectranetBundle:Project:getEpicStories }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_epic_story:
+    pattern: /project/{project_id}/addNewEpicStory
+    defaults: { _controller: ZectranetBundle:Project:addNewEpicStory }
+    requirements:
+        project_id: \d+
+
+zectranet_project_delete_epic_stories:
+    pattern: /project/{project_id}/deleteEpicStories
+    defaults: { _controller: ZectranetBundle:Project:deleteEpicStories }
+    requirements:
+        project_id: \d+
+
+zectranet_task_show:
+    pattern: /task/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:showTask }
+    requirements:
+        task_id: \d+
+
+zectranent_task_get_single:
+    pattern: /task/get/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:getSingleTask }
+    requirements:
+        task_id: \d+
+
+zectranet_task_edit_info:
+    pattern: /task/{task_id}/edit_info
+    defaults: { _controller: ZectranetBundle:Task:editInfo }
+    requirements:
+        task_id: \d+
+
+zectranet_task_edit_descritpion:
+    pattern: /task/{task_id}/edit_description
+    defaults: { _controller: ZectranetBundle:Task:editDescription }
+    requirements:
+        task_id: \d+
+
+zectranet_task_delete:
+    pattern: /task/{task_id}/deleteTask
+    defaults: { _controller: ZectranetBundle:Task:deleteTask }
+    requirements:
+        task_id: \d+
+
+zectranet_upload:
+    pattern: /upload/
+    defaults: { _controller: ZectranetBundle:Upload:index }
+
+zectranet_document_upload:
+    pattern: /upload/documents/
+    defaults: { _controller: ZectranetBundle:Upload:upload }
+
+zectranet_document_get:
+    pattern: /upload/documents/get/
+    defaults: { _controller: ZectranetBundle:Upload:getDocuments }
+
+zectranet_document_rename:
+    pattern: /documents/{fileid}/rename
+    defaults: { _controller: ZectranetBundle:Upload:renameDoc }
+    requirements:
+        fileid: \d+
+
+zectranet_document_delete:
+    pattern: /documents/{fileid}/delete/
+    defaults: { _controller: ZectranetBundle:Upload:removeDoc }
+    requirements:
+        fileid: \d+
+
+zectranet_show_sprint:
+    pattern: /project/{project_id}/sprint/{sprint_id}
+    defaults: { _controller: ZectranetBundle:Sprint:index }
+    requirements:
+        project_id: \d+
+        sprint_id: \d+
+
+zectranet_show_sprint_settings:
+    pattern: /project/{project_id}/sprint/{sprint_id}/settings
+    defaults: { _controller: ZectranetBundle:Sprint:showSprintSettings }
+    requirements:
+        project_id: \d+
+        sprint_id: \d+
+
+zectranet_sprint_add:
+    pattern: /sprint/{project_id}/addSprint
+    defaults: { _controller: ZectranetBundle:Sprint:addSprint }
+    requirements:
+        project_id: \d+
+
+zectranet_sprint_delete:
+    pattern: /project/{project_id}/sprint/{sprint_id}/deleteSprint
+    defaults: { _controller: ZectranetBundle:Sprint:deleteSprint }
+    requirements:
+        project_id: \d+
+        sprint_id: \d+
+
+zectranet_sprint_add_tasks:
+    pattern: /sprint/{sprint_id}/addTasksToSprint
+    defaults: { _controller: ZectranetBundle:Sprint:addTasksToSprint }
+    requirements:
+        sprint_id: \d+
+
+zectranet_sprint_permission_save:
+    pattern: /sprint/{sprint_id}/user/{user_id}/save
+    defaults: { _controller: ZectranetBundle:Sprint:savePermissions }
+    requirements:
+        sprint_id: \d+
+        user_id: \d+
+
+zectranet_project_permission_save:
+    pattern: /project/{project_id}/user/{user_id}/save
+    defaults: { _controller: ZectranetBundle:Project:savePermissions }
+
+zectranet_detach_task_from_sprint:
+    pattern: /task/detach_from_sprint/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:detachFromSprint }
+    requirements:
+        task_id: \d+
+
+zectranet_sprint_get_tasks:
+    pattern: /sprint/{sprint_id}/getTasks
+    defaults: { _controller: ZectranetBundle:Sprint:getTasks }
+    requirements:
+        sprint_id: \d+
+
+zectranet_sprint_change_state:
+    pattern: /sprint/{sprint_id}/changeState/{state}
+    defaults: { _controller: ZectranetBundle:Sprint:changeSprintState }
+    requirements:
+        sprint_id: \d+
+        state: \d+
+
+zectranet_InsertScreenshotsInPHP:
+    pattern: /upload/insertscreenshots
+    defaults: { _controller: ZectranetBundle:Upload:Insert_Screenshots_InPHP }
+
+zectranet_task_get_post:
+    pattern: /task/{task_id}/getPosts
+    defaults: { _controller: ZectranetBundle:Task:getPosts }
+    requirements:
+        office_id: \d+
+
+zectranet_task_add_post:
+    pattern: /task/{task_id}/addPosts
+    defaults: { _controller: ZectranetBundle:Task:addPost }
+    requirements:
+        office_id: \d+
+
+zectranet_show_project_versions:
+    pattern: /project/{project_id}/showVersions
+    defaults: { _controller: ZectranetBundle:Project:showProjectVersion }
+    requirements:
+        project_id: \d+
+
+zectranet_send_user_membership_request:
+    pattern: /request/send
+    defaults: { _controller: ZectranetBundle:User:sendContactMembershipRequest }
+
+zectranet_approve_contact_membership_request:
+    pattern: /request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveContactMembershipRequest }
+
+zectranet_get_contact_list:
+    pattern: /user/get/contact_list
+    defaults: { _controller: ZectranetBundle:User:getContactList }
+
+zectranet_get_conversation:
+    pattern: /user/get/conversation/{contact_id}
+    defaults: { _controller: ZectranetBundle:Conversation:getConversation }
+
+zectranet_send_conversation_message:
+    pattern: /user/send/conversation/message/{conversation_id}
+    defaults: { _controller: ZectranetBundle:Conversation:sendMessage }
+
+zectranet_edit_conversation_message:
+    pattern: /user/edit/conversation/message/{message_id}
+    defaults: { _controller: ZectranetBundle:Conversation:editMessage }
+
+zectranet_get_hf_settings_info:
+    pattern: /hf/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:getProjectSettingsInfo }
+
+zectranet_send_hf_request:
+    pattern: /hf/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
+
+zectranet_re_send_hf_request:
+    pattern: /hf/re/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:reSendRequest }
+
+zectranet_approve_hf_membership_request:
+    pattern: /hf/request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveHFForumMembershipRequest }
+
+zectranet_delete_hf_request:
+    pattern: /hf/request/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }
+
+############################### BEGIN OF QNA FORUM REQUESTS ###############################
+
+zectranet_get_QNA_project_settings_info:
+    pattern: /project/QnA/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:getProjectSettingsInfo }
+
+zectranet_send_QNA_project_request:
+    pattern: /project/QnA/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:sendRequest }
+
+zectranet_re_send_QNA_request:
+    pattern: /QNA/re/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:reSendRequest }
+
+zectranet_delete_QNA_project_request:
+    pattern: /request/QnA/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:deleteRequest }
+
+zectranet_approve_QNA_membership_request:
+    pattern: /QnA/request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveQnAForumMembershipRequest }
+
+zectranet_approve_project_membership_request:
+    pattern: /Project/request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveProjectMembershipRequest }
+
+############################### END QNA FORUM REQUESTS ###################################
+
+############################### BEGIN PROJECT REQUESTS ###################################
+
+zectranet_get_project_settings_info:
+    pattern: /project/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:getProjectSettingsInfo }
+
+zectranet_send_project_request:
+    pattern: /project/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:sendRequest }
+
+zectranet_delete_project_request:
+    pattern: /request/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:Project:deleteRequest }
+
+zectranet_re_send_request:
+    pattern: /project/re/Send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:reSendRequest }
+
+
+############################### END PROJECT REQUESTS #####################################
+
+zectranet_get_office_profile:
+    pattern: /office/{office_id}/profile
+    defaults: { _controller: ZectranetBundle:OfficeProfile:index }
+
+zectranet_get_edit_office_profile:
+    pattern: /office/{office_id}/profile/edit
+    defaults: { _controller: ZectranetBundle:OfficeProfile:indexEdit }
+
+
+##################################################################################
+########################## BEGIN OF SEARCH ROUTINGS ##############################
+##################################################################################
+
+zectranet_quick_search:
+    pattern: /quick_search
+    defaults: { _controller: ZectranetBundle:Search:MiniSearch }
+
+zectranet_search_page:
+    pattern: /search/{slug}
+    defaults: { _controller: ZectranetBundle:Search:Search, slug: null }
+
+##################################################################################
+########################## END OF SEARCH ROUTINGS ################################
+##################################################################################
